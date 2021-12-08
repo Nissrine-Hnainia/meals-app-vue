@@ -1,6 +1,8 @@
 <template>
     <h1>Our meals categories list</h1>
+    <loading-recipes v-if="loading"> </loading-recipes>
     <ul
+        v-else
         role="list"
         class="grid grid-cols-1 gap-16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
     >
@@ -29,15 +31,18 @@
 import axios from "axios";
 import RecipeCard from "./RecipeCard.vue";
 import AddRecipe from "./AddRecipe.vue";
+import LoadingRecipes from "./LoadingRecipes.vue";
 
 export default {
     components: {
         RecipeCard,
         AddRecipe,
+        LoadingRecipes,
     },
     data() {
         return {
             recipes: [],
+            loading: true,
             showModal: false,
         };
     },
@@ -47,6 +52,7 @@ export default {
                 "https://www.themealdb.com/api/json/v1/1/categories.php"
             );
             this.recipes = res.data.categories;
+            this.loading = false;
         } catch (error) {
             console.log(error);
         }

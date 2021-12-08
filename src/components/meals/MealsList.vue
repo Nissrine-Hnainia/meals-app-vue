@@ -1,5 +1,6 @@
 <template>
-    <div class="my-container">
+    <loading-recipes v-if="loading"> </loading-recipes>
+    <div v-else class="my-container">
         <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <meal-card
                 v-for="meal in meals"
@@ -30,12 +31,14 @@
 import axios from "axios";
 import MealCard from "./MealCard.vue";
 import AddMeal from "./AddMeal.vue";
+import LoadingRecipes from "../categories/LoadingRecipes.vue";
 
 export default {
-    components: { MealCard, AddMeal },
+    components: { MealCard, AddMeal, LoadingRecipes },
     data() {
         return {
             meals: [],
+            loading: true,
             showModal: false,
         };
     },
@@ -46,6 +49,7 @@ export default {
                 `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryId}`
             );
             this.meals = res.data.meals;
+            this.loading = false;
         } catch (error) {
             console.log(error);
         }
